@@ -70,7 +70,7 @@
 				<div class="form-content">
 					<div class="btn-close-form" onclick="closeModalEdit()">X</div>
 					<div class="form-body">
-						<form id="formEdit">
+						<form id="formEdit" class="form-group">
 							<div class="control">
 								<input id="id" type="hidden" />
 							</div>
@@ -109,8 +109,8 @@
 						</form>
 					</div>
 					<div class="form-footer">
-						<button type="button" onclick="closeModalEdit()">Cancelar</button>
-						<button type="button" onclick="updateCustomer()">Guardar cambios</button>
+						<button type="button" class="btn btn-danger" onclick="closeModalEdit()">Cancelar</button>
+						<button type="button" class="btn btn-success" onclick="updateCustomer()">Guardar cambios</button>
 					</div>
 					<span id="msgFormEdit" class="msg-error"></span>
 				</div>
