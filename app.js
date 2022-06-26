@@ -100,79 +100,61 @@ const addCustomer = () => {
 		});
 };
 
-const getCustomerByID = (id) => {
-	fetch(`${API_URL}/add/${id}`, {
-		method: "GET",
-		body: JSON.stringify(customer),
-		headers: {
-			"Content-Type": "application/json",
-		},
-	})
-		.then((response) => response.json())
-		.catch((error) => {
-			alertManager("error", "Ocurrión un problema al cargar los productos");
-		})
-		.then((data) => {
-			renderResult(data);
-		});
-
-	const customerByID = {
-		name: formData.get("name"),
-		surname: formData.get("surname"),
-		birthdate: formData.get("bithdate"),
-		phone: formData.get("phone"),
-		country: formData.get("country"),
-		city: formData.get("city"),
-		direction: formData.get("direction"),
-		postCode: formData.get("postCode"),
-	};
-
-	console.log(customerByID);
+const getCustomerByID = async (id) => {
+	let response = await fetch(`${API_URL}/${id}`);
+	let customerData = await response.json();
+	return customerData;
 };
 
-const editCustomer = (id) => {
-	let customer = {};
-	getCustomerByID(id).filter((customer) => {
-		if (customer.Id == id) {
-			customer = customer;
-		}
-	});
-
+const editCustomer = (customer) => {
 	document.querySelector("#formEdit #id").value = customer.id;
 	document.querySelector("#formEdit #name").value = customer.name;
 	document.querySelector("#formEdit #surname").value = customer.surname;
 	document.querySelector("#formEdit #birthdate").value = customer.birthdate;
 	document.querySelector("#formEdit #phone").value = customer.phone;
-
-	console.log(customer);
-	openModalEdit();
+	document.querySelector("#formEdit #country").value = customer.country;
+	document.querySelector("#formEdit #city").value = customer.city;
+	document.querySelector("#formEdit #direction").value = customer.direction;
+	document.querySelector("#formEdit #postCode").value = customer.postCode;
 };
 
 const updateCustomer = () => {
-	const customer = {
-		Nombre: document.querySelector("#formEdit #nombre").value,
-		Color: document.querySelector("#formEdit #color").value,
-		Precio: document.querySelector("#formEdit #precio").value,
-		Id: document.querySelector("#formEdit #ID").value,
+	const customerToUpdate = {
+		id: document.querySelector("#formEdit #id").value,
+		name: document.querySelector("#formEdit #name").value,
+		surname: document.querySelector("#formEdit #surname").value,
+		birthdate: document.querySelector("#formEdit #birthdate").value,
+		phone: document.querySelector("#formEdit #phone").value,
+		country: document.querySelector("#formEdit #country").value,
+		city: document.querySelector("#formEdit #city").value,
+		direction: document.querySelector("#formEdit #direction").value,
+		postCode: document.querySelector("#formEdit #postCode").value,
 	};
 
 	document.querySelector("#msgFormEdit").innerHTML = "";
 
-	fetch(API_URL, {
-		method: "PUT",
-		body: JSON.stringify(product),
-		headers: {
-			"Content-Type": "application/json",
-		},
-	})
-		.then((res) => res.json())
-		.catch((error) => {
-			alertManager("error", error);
-		})
-		.then((response) => {
-			alertManager("success", response);
-			getProducts();
+	fetch(`${API_URL}/update?id=${customerToUpdate.id}
+	&name=${customerToUpdate.name}
+	&surname=${customerToUpdate.surname}
+	&birthdate=${customerToUpdate.birthdate}
+	&phone=${customerToUpdate.phone}
+	&country=${customerToUpdate.country}
+	&city=${customerToUpdate.city}
+	&direction=${customerToUpdate.direction}
+	&postCode=${customerToUpdate.postCode}
+	`)
+		/* .then((response) => response.text())
+		.then((result) => console.log(result))
+		.catch((error) => console.log("error", error)); */
+
+		.then((response) => response.text())
+		.catch((error) => console.log("error", error))
+		.then((result) => {
+			console.log(result);
+			closeModalEdit();
+			getCustomer();
 		});
+
 	document.querySelector("#formEdit").reset();
 };
 
@@ -225,8 +207,10 @@ const openModalAdd = () => {
 /** --------------------------------------------------------------- */
 const modalEdit = document.querySelector("#modalEdit");
 
-const openModalEdit = () => {
+const openModalEdit = async (id) => {
 	modalEdit.style.display = "block";
+	let customerData = await getCustomerByID(id);
+	editCustomer(customerData);
 };
 
 const closeModalEdit = () => {
