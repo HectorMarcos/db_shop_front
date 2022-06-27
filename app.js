@@ -10,7 +10,10 @@ const getCustomer = () => {
 	fetch(API_URL)
 		.then((response) => response.json())
 		.catch((error) => {
-			alertManager("error", "Ocurrión un problema al cargar los productos");
+			alertManager(
+				"error",
+				"Ocurrión un problema al cargar los productos"
+			);
 		})
 		.then((data) => {
 			renderResult(data);
@@ -143,10 +146,6 @@ const updateCustomer = () => {
 	&direction=${customerToUpdate.direction}
 	&postCode=${customerToUpdate.postCode}
 	`)
-		/* .then((response) => response.text())
-		.then((result) => console.log(result))
-		.catch((error) => console.log("error", error)); */
-
 		.then((response) => response.text())
 		.catch((error) => console.log("error", error))
 		.then((result) => {
